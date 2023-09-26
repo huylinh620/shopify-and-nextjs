@@ -1,39 +1,20 @@
-import Head from 'next/head'
-import Link from 'next/link'
-import Layout, { siteTitle } from '../components/layout'
-import Date from '../components/date'
-import utilStyles from '../styles/utils.module.css'
-import { getSortedPostsData } from '../lib/posts'
+import { getProductsInCollection } from '../lib/shopify'
+import ProductList from '../components/ProductList'
 
-export default function Home({ allPostsData }) {
+export default function Home({ products }) {
   return (
-    <Layout home>
-      <Head>
-        <title>{siteTitle}</title>
-      </Head>
-      <section className={utilStyles.headingMd}>
-        {allPostsData}
-        <ul className={utilStyles.list}>
-          {allPostsData.map(({ id, date, title }) => (
-          <li className={utilStyles.listItem} key={id}>
-            <Link href={`/posts/${id}`}>{title}</Link>
-            <br />
-            <small className={utilStyles.lightText}>
-            <Date dateString={date} />
-            </small>
-          </li>
-          ))}
-        </ul>
-      </section>
-    </Layout>
+    <div className='text-3xl'>
+      <ProductList products={products} />
+    </div>
   )
 }
 
 export async function getStaticProps() {
-  const allPostsData = getSortedPostsData()
+  const products = await getProductsInCollection()
+
   return {
     props: {
-      allPostsData,
+      products,
     },
   }
 }
